@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact</title>
+    <style>
+      .alert {
+        color: red;
+      }
+      .text {
+        color: darkslategrey;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .container {
+     
+        text-align: center;
+        font-size: large;
+        font-weight: bold;
+        background-color: gray;
+        background-color: #f0f0f0;
+        background-image: linear-gradient(to bottom, #f0f0f0, #918f8f);
+      }
+    </style>
+</head>
+<body>
+    {% for message in get_flashed_messages() %}
+      <div class="alert">{{ message }}</div>
+    {% endfor %}
+    <div class="container">
+    <h1 class="text">Contact</h1>
+    <br>
+    <form method="POST">
+   
+                    <label>
+                        Name and family name:
+                        <input id="from" name="from" placeholder="Enter youe name and family name">
+                      </label>
+                      <br>
+                      <br>
+                      <label>
+                        Email:
+                        <input type="email" id="email" name="email" placeholder="Enter your email:" required>
+                      </label>
+                      <br>
+                      <br>
+                      <label for="country">
+                        <select id="country" name="country" required>
+                            <option selected disabled>Chose your country</option>
+                            <option>Belgium</option>
+                            <option>France</option>
+                            <option>Poland</option>
+                            <option>Germany</option>
+                          </select>
+                      </label>
+                      <br>
+                      <br>
+                      <label for="inp-message">
+                        Your message:
+                      </label>
+                      <textarea name="message" id="inp-message" placeholder="Enter your message" required></textarea>
+                      <br>
+                      <br>
+                      <label for="gender">
+                        Chose your gender:
+                        <input type="radio" id="male" name="gender" value="male">Male
+                        <input type="radio" id="female" name="gender" value="female">Female
+                      </label>
+                      <br>
+                      <br>
+                      <label for="option"> 
+                       Tick the reason for the contact:
+                       <br>
+                       <br>
+                      <input type="checkbox" id="repair" name="reason" value="repair">
+                      <label for="repair"> Repair</label><br>
+                      <input type="checkbox" id="order" name="reason" value="order">
+                      <label for="order"> Order</label><br>
+                      <input type="checkbox" id="other" name="reason" value="other">
+                      <label for="other"> Other</label><br>  
+                      <br>
+                    </label>
+                      <label for="honeypot" style="display:none;">honeypot</label>
+                      <input type="text" id="honeypot" name="honeypot" style="display:none;">
+
+                  
+                  <div class="g-recaptcha" data-sitekey="6Lc9_xMUAAAAAFPVNhvDKb9lMXHGI4o7-zhqkTgL"></div><br>
+                  <button type="submit">Send</button>
+                </form>
+                </div>
+</body>
+</html>
