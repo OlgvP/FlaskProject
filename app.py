@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, make_response
 import re
+import html
+import bleach
 
 app = Flask(__name__)
 app.secret_key = '6Lc9_xMUAAAAAFPVNhvDKb9lMXHGI4o7-zhqkTgL'
@@ -9,6 +11,10 @@ app.jinja_env.autoescape = True
 def is_valid_email(email):
     email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     return re.match(email_regex, email)
+    
+# Sanitize user input
+def sanitize_input(input_data):
+    return bleach.clean(input_data)
 
 # Implement CSP after processing the request
 @app.after_request
@@ -31,7 +37,6 @@ def index():
 
         # Validation
         errors = []
-        user_input = []
         if not name:
             print('ENTERED VALIDATION - NAME FIELD')
             errors.append('Name is required.')
@@ -74,12 +79,13 @@ def index():
 
 @app.route('/confirmation')
 def confirmation():
-    name = request.args.get('name')
-    email = request.args.get('email')
-    country = request.args.get('country')
-    message = request.args.get('message')
-    gender = request.args.get('gender')
-    reason = request.args.get('reason')
+    name = sanitize_input(html.escape(request.args.get('name')))
+    email = sanitize_input(html.escape(request.args.get('email')))
+    country = sanitize_input(html.escape(request.args.get('country')))
+    message = sanitize_input(html.escape(request.args.get('message')))
+    gender = sanitize_input(html.escape(request.args.get('gender')))
+    reason = sanitize_input(html.escape(request.args.get('reason')))
+
 
     return render_template('confirmation.html',
                            name=name,
