@@ -32,3 +32,5 @@ First name & last name + email + country (list) + message + gender (M/F) (Radio 
 - Protect yourself against SSTI attacks.
 - Use a micro framework.
 - Perform a deployment.
+### Challenge
+-Sql & Flask : Rework the form project made with Flask and link it to a db, with the structure of your choice for the data that are collected ;)
