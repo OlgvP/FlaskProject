@@ -10,7 +10,7 @@ app.secret_key = '6Lc9_xMUAAAAAFPVNhvDKb9lMXHGI4o7-zhqkTgL'
 mydb = mysql.connector.connect(
     host="localhost",
     user="Olga",
-    password="Olsesunia1.",
+    password="**********",
     database="databaseflask"
 )
 
