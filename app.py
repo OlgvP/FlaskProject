@@ -2,16 +2,25 @@ from flask import Flask, render_template, request, redirect, url_for, flash, mak
 import re
 import html
 import bleach
+import mysql.connector
+
 
 app = Flask(__name__)
 app.secret_key = '6Lc9_xMUAAAAAFPVNhvDKb9lMXHGI4o7-zhqkTgL'
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="Olga",
+    password="Olsesunia1.",
+    database="databaseflask"
+)
+
 app.jinja_env.autoescape = True
 
 # Function for validating email address using regex
 def is_valid_email(email):
     email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     return re.match(email_regex, email)
-    
+
 # Sanitize user input
 def sanitize_input(input_data):
     return bleach.clean(input_data)
@@ -40,12 +49,8 @@ def index():
         if not name:
             print('ENTERED VALIDATION - NAME FIELD')
             errors.append('Name is required.')
-        #else:
-            #user_input.append("Name and next name: " + name)
         if not email:
             errors.append('Email is required.')
-        #else:
-            #user_input.append("Email: " + email)
         if is_valid_email(email) == None:
             errors.append('Email is invalid.')
         if not country:
@@ -54,7 +59,7 @@ def index():
             errors.append('Gender is required.')
         if not reason:
             reason = ['other']  # If no other option was chosen, 'other' will be selected
-        #flash(user_input)
+     
         # Checking honeypot
         honeypot = request.form.get('honeypot')
         if honeypot:
@@ -68,6 +73,14 @@ def index():
         else:
             # If validation is correct, redirect to confirmation
             print(errors)
+            # Save data into databaseflask
+            mycursor = mydb.cursor()
+            sql = "INSERT INTO contacts (name, email, country, message, gender, reason) VALUES (%s, %s, %s, %s, %s, %s)"
+            val = (name, email, country, message, gender, ', '.join(reason))
+            mycursor.execute(sql, val)
+            mydb.commit()
+
+
             return redirect(url_for('confirmation',
                                     name=name,
                                     email=email,
@@ -75,6 +88,7 @@ def index():
                                     message=message,
                                     gender=gender,
                                     reason=', '.join(reason)))
+            mycursor.close()
     return render_template('form.html')
 
 @app.route('/confirmation')
